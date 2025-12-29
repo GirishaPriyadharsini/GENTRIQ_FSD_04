@@ -1,4 +1,4 @@
-/* Reset and Base Styles */
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -1162,4 +1162,5 @@ footer {
     .header-actions .btn {
         flex: 1;
     }
+
 }
