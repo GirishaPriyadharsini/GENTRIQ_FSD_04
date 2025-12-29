@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ProductivityPro</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-tasks"></i>
+                    <span>ProductivityPro</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <h4 id="usernameDisplay">User</h4>
+                    <p id="emailDisplay">user@example.com</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="#" class="nav-item active" data-section="dashboard">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-section="notes">
+                            <i class="fas fa-sticky-note"></i>
+                            <span>Notes</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-section="todos">
+                            <i class="fas fa-check-circle"></i>
+                            <span>To-Do List</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-section="reminders">
+                            <i class="fas fa-bell"></i>
+                            <span>Reminders</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-item" data-section="categories">
+                            <i class="fas fa-tags"></i>
+                            <span>Categories</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-outline btn-block">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <h1 id="sectionTitle">Dashboard</h1>
+                <div class="header-actions">
+                    <button id="addNoteBtn" class="btn btn-primary" style="display: none;">
+                        <i class="fas fa-plus"></i> Add Note
+                    </button>
+                    <button id="addTodoBtn" class="btn btn-primary" style="display: none;">
+                        <i class="fas fa-plus"></i> Add Task
+                    </button>
+                    <button id="addReminderBtn" class="btn btn-primary" style="display: none;">
+                        <i class="fas fa-plus"></i> Add Reminder
+                    </button>
+                    <button id="addCategoryBtn" class="btn btn-outline" style="display: none;">
+                        <i class="fas fa-plus"></i> Add Category
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboardSection" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #4e73df;">
+                            <i class="fas fa-sticky-note"></i>
+                        </div>
+                        <h3 id="notesCount">0</h3>
+                        <p>Total Notes</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #1cc88a;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 id="todosCount">0</h3>
+                        <p>Total Tasks</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #f6c23e;">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3 id="remindersCount">0</h3>
+                        <p>Active Reminders</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: #e74a3b;">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3 id="categoriesCount">0</h3>
+                        <p>Categories</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Pinned Notes -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-thumbtack"></i> Pinned Notes</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="pinnedNotesList" class="notes-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Reminders -->
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-clock"></i> Upcoming Reminders</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="upcomingReminders" class="reminders-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Today's Tasks -->
+                    <div class="dashboard-card full-width">
+                        <div class="card-header">
+                            <h3><i class="fas fa-calendar-day"></i> Today's Tasks</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="todaysTasks" class="todos-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notes Section -->
+            <section id="notesSection" class="content-section">
+                <div class="notes-container">
+                    <div class="notes-sidebar">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="noteSearch" placeholder="Search notes...">
+                        </div>
+                        <div class="categories-filter">
+                            <h4>Categories</h4>
+                            <div id="noteCategoriesList"></div>
+                        </div>
+                    </div>
+                    <div class="notes-main">
+                        <div id="notesList" class="notes-grid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Todos Section -->
+            <section id="todosSection" class="content-section">
+                <div class="todos-container">
+                    <div class="todos-filters">
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-filter="all">All</button>
+                            <button class="filter-tab" data-filter="pending">Pending</button>
+                            <button class="filter-tab" data-filter="completed">Completed</button>
+                        </div>
+                        <select id="priorityFilter" class="filter-select">
+                            <option value="all">All Priorities</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div id="todosList" class="todos-list"></div>
+                </div>
+            </section>
+
+            <!-- Reminders Section -->
+            <section id="remindersSection" class="content-section">
+                <div class="reminders-container">
+                    <div class="reminders-filters">
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-filter="upcoming">Upcoming</button>
+                            <button class="filter-tab" data-filter="past">Past</button>
+                            <button class="filter-tab" data-filter="completed">Completed</button>
+                        </div>
+                    </div>
+                    <div id="remindersList" class="reminders-list"></div>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section id="categoriesSection" class="content-section">
+                <div class="categories-container">
+                    <div id="categoriesList" class="categories-grid"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Note</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="noteForm">
+                    <div class="form-group">
+                        <label for="noteTitle">Title</label>
+                        <input type="text" id="noteTitle" name="title" placeholder="Note title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="noteContent">Content</label>
+                        <textarea id="noteContent" name="content" rows="5" placeholder="Write your note here..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="noteCategory">Category</label>
+                            <select id="noteCategory" name="category_id">
+                                <option value="">No Category</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox">
+                                <input type="checkbox" id="notePinned" name="is_pinned">
+                                <span>Pin this note</span>
+                            </label>
+                        </div>
+                    </div>
+                    <input type="hidden" id="noteId" name="id">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline modal-close">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Note</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="todoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Task</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="todoForm">
+                    <div class="form-group">
+                        <label for="todoTask">Task</label>
+                        <input type="text" id="todoTask" name="task" placeholder="What needs to be done?" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="todoPriority">Priority</label>
+                            <select id="todoPriority" name="priority">
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="todoDueDate">Due Date</label>
+                            <input type="date" id="todoDueDate" name="due_date">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="todoCategory">Category</label>
+                        <select id="todoCategory" name="category_id">
+                            <option value="">No Category</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="todoId" name="id">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline modal-close">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="reminderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Reminder</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reminderForm">
+                    <div class="form-group">
+                        <label for="reminderTitle">Title</label>
+                        <input type="text" id="reminderTitle" name="title" placeholder="Reminder title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reminderDescription">Description</label>
+                        <textarea id="reminderDescription" name="description" rows="3" placeholder="Reminder details..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="reminderDateTime">Date & Time</label>
+                            <input type="datetime-local" id="reminderDateTime" name="reminder_time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reminderCategory">Category</label>
+                            <select id="reminderCategory" name="category_id">
+                                <option value="">No Category</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="reminderId" name="id">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline modal-close">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Reminder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="categoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Category</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <div class="form-group">
+                        <label for="categoryName">Category Name</label>
+                        <input type="text" id="categoryName" name="name" placeholder="e.g., Work, Personal" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryColor">Color</label>
+                        <input type="color" id="categoryColor" name="color" value="#007bff">
+                    </div>
+                    <input type="hidden" id="categoryId" name="id">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline modal-close">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
