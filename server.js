@@ -62,7 +62,6 @@ pool.getConnection()
     });
 
 // Routes
-
 // Register
 app.post('/api/register', validateRegister, async (req, res) => {
     const errors = validationResult(req);
@@ -82,17 +81,12 @@ app.post('/api/register', validateRegister, async (req, res) => {
         if (existing.length > 0) {
             return res.status(400).json({ error: 'User already exists' });
         }
-        
-        // Hash password
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        
-        // Create user
         const [result] = await pool.execute(
             'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
             [username, email, hashedPassword]
         );
-        
-        // Create default categories for new user
         const defaultCategories = [
             ['Personal', '#007bff'],
             ['Work', '#8c00ff'],
@@ -126,8 +120,6 @@ app.post('/api/login', validateLogin, async (req, res) => {
 
     try {
         const { email, password } = req.body;
-        
-        // Get user
         const [users] = await pool.execute(
             'SELECT * FROM users WHERE email = ?',
             [email]
@@ -144,8 +136,6 @@ app.post('/api/login', validateLogin, async (req, res) => {
         if (!validPassword) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-        
-        // Create token
         const token = jwt.sign(
             { id: user.id, username: user.username, email: user.email },
             process.env.JWT_SECRET || 'your-secret-key',
@@ -167,7 +157,7 @@ app.post('/api/login', validateLogin, async (req, res) => {
     }
 });
 
-// Get all user data (optimized single query)
+// Get all user data
 app.get('/api/user-data', authenticateToken, async (req, res) => {
     try {
         const userId = req.user.id;
@@ -281,8 +271,6 @@ app.put('/api/categories/:id', authenticateToken, async (req, res) => {
 app.delete('/api/categories/:id', authenticateToken, async (req, res) => {
     try {
         const categoryId = req.params.id;
-        
-        // First, set category_id to NULL for all notes, todos, and reminders using this category
         await pool.execute(
             'UPDATE notes SET category_id = NULL WHERE category_id = ? AND user_id = ?',
             [categoryId, req.user.id]
@@ -621,12 +609,8 @@ app.get('/api/today-tasks', authenticateToken, async (req, res) => {
     }
 });
 
-// Health check
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'OK', message: 'Server is running' });
-});
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
+
 });
