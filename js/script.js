@@ -1,5 +1,4 @@
   //auth
-  // Check authentication
 function checkAuth() {
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
@@ -114,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-//notes.js
+//notes
 
 let currentNotes = [];
 let categories = [];
@@ -341,8 +340,6 @@ function populateCategoriesFilter(categories) {
             <span>${cat.name}</span>
         </div>
     `).join('');
-    
-    // Add click handlers
     container.querySelectorAll('.category-filter-item').forEach(item => {
         item.addEventListener('click', function() {
             const categoryId = this.dataset.category;
@@ -356,7 +353,6 @@ function filterNotesByCategory(categoryId) {
     let filteredNotes = currentNotes;
     
     if (categoryId === 'all') {
-        // Show all notes
     } else if (categoryId === 'null') {
         filteredNotes = currentNotes.filter(note => !note.category_id);
     } else {
@@ -415,7 +411,7 @@ window.deleteNote = deleteNote;
 window.togglePinNote = togglePinNote;
 window.closeModal = closeModal;
 
-//reminder.js
+//reminder
 
 let currentReminders = [];
 
@@ -503,8 +499,6 @@ function displayReminders(reminders) {
 function openReminderModal(reminder = null) {
     const modal = document.getElementById('reminderModal');
     const form = document.getElementById('reminderForm');
-    
-    // Set minimum datetime to now
     const now = new Date();
     const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
         .toISOString()
@@ -515,8 +509,6 @@ function openReminderModal(reminder = null) {
         document.getElementById('reminderId').value = reminder.id;
         document.getElementById('reminderTitle').value = reminder.title;
         document.getElementById('reminderDescription').value = reminder.description || '';
-        
-        // Convert to local datetime string
         const reminderTime = new Date(reminder.reminder_time);
         const localTime = new Date(reminderTime.getTime() - reminderTime.getTimezoneOffset() * 60000)
             .toISOString()
@@ -680,8 +672,6 @@ window.toggleReminderComplete = toggleReminderComplete;
 // todos
 
 let currentTodos = [];
-
-// Load todos
 async function loadTodos() {
     try {
         const response = await fetch('/api/user-data', {
@@ -923,8 +913,6 @@ function applyTodoFilters() {
     
     displayTodos(filteredTodos);
 }
-
-// Check if date is overdue
 function isOverdue(dateString) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -932,8 +920,6 @@ function isOverdue(dateString) {
     dueDate.setHours(0, 0, 0, 0);
     return dueDate < today;
 }
-
-// Format date for display
 function formatDate(dateString) {
     const date = new Date(dateString);
     const today = new Date();
@@ -956,9 +942,8 @@ window.deleteTodo = deleteTodo;
 window.toggleTodoComplete = toggleTodoComplete;
   
 
-// categories.js
+// categories
 
-// Load categories
 async function loadCategories() {
     try {
         const response = await fetch('/api/user-data', {
@@ -1089,7 +1074,6 @@ function editCategory(id) {
     if (category) {
         openCategoryModal(category);
     } else {
-        // If not found, reload data
         loadCategories().then(() => {
             const updatedData = JSON.parse(localStorage.getItem('userData') || '{}');
             const updatedCategory = updatedData.categories?.find(c => c.id == id);
@@ -1121,7 +1105,6 @@ async function deleteCategory(id) {
         
         if (response.ok) {
             loadCategories();
-            // Refresh other sections
             loadNotes();
             loadTodos();
             loadReminders();
@@ -1218,8 +1201,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('sidebarToggle').addEventListener('click', function() {
         document.querySelector('.sidebar').classList.toggle('collapsed');
     });
-
-    // Also add click handlers for the add buttons
     document.getElementById('addNoteBtn')?.addEventListener('click', function() {
         openNoteModal();
     });
@@ -1381,4 +1362,5 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch (error) {
                 console.error('Error updating todo:', error);
             }
+
         }
