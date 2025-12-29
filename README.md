@@ -134,8 +134,9 @@ TODOLIST/
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/productivitypro.git
-cd productivitypro
+git clone https://github.com/GirishaPriyadharsini/GENTRIQ_FSD_04.git
+cd GENTRIQ_FSD_04
+
 ```
 
 ### 2️⃣ Install Dependencies
